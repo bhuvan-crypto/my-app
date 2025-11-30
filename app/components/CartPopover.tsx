@@ -1,0 +1,106 @@
+"use client";
+
+import React from 'react';
+import {
+  Button,
+  Box,
+  HStack,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
+import useCart from '../lib/cartStore';
+import useProducts from '../lib/productsStore';
+import useOrders from '../lib/ordersStore';
+import type { Product } from '../lib/products';
+
+export default function CartPopover() {
+  const { open, onOpen, onClose } = useDisclosure();
+  const cart = useCart((s) => s.cart);
+  const add = useCart((s) => s.add);
+  const remove = useCart((s) => s.remove);
+  const clear = useCart((s) => s.clear);
+  const addOrder = useOrders((s) => s.add);
+
+  const count = Object.values(cart).reduce((sum, v) => sum + v, 0);
+  const products: Product[] = useProducts((s: any) => s.products);
+  const total = Object.entries(cart).reduce((sum, [id, q]) => {
+    const p = products.find((x) => x.id === id);
+    return sum + (p ? p.price * q : 0);
+  }, 0);
+
+  function placeOrder() {
+    if (count === 0) {
+      alert('Your cart is empty');
+      return;
+    }
+    // build order snapshot
+    const orderItems = Object.entries(cart)
+      .map(([id, qty]) => {
+        const p = products.find((x) => x.id === id);
+        if (!p) return null;
+        return { id: p.id, name: p.name, price: p.price, qty };
+      })
+      .filter(Boolean) as { id: string; name: string; price: number; qty: number }[];
+
+    const orderTotal = orderItems.reduce((s, it) => s + it.price * it.qty, 0);
+    const order = { id: `o${Date.now()}`, items: orderItems, total: orderTotal, createdAt: Date.now() };
+    addOrder(order);
+
+    alert('Order placed — thank you!');
+    clear();
+    onClose();
+  }
+
+  return (
+    <Box position="relative" display="inline-block">
+      <Button size="sm" onClick={open ? onClose : onOpen} aria-label="Toggle cart" p={2}>
+        Cart: <strong style={{ marginLeft: 6 }}>{count}</strong>
+      </Button>
+
+      {open && (
+        <Box position="absolute" right={0} top="48px" w={["xs", "xs"]} bg="white" _dark={{ bg: '#0b0b0b' }} borderWidth="1px" borderColor="gray.200" shadow="md" borderRadius="md" zIndex={30}>
+          <Box p={4}>
+            <Text fontSize="sm" fontWeight="semibold">Your cart</Text>
+
+            <Box mt={3} maxH="14rem" overflowY="auto">
+              {Object.keys(cart).length === 0 ? (
+                <Text fontSize="xs" color="gray.500">No items in your cart.</Text>
+              ) : (
+                <Box>
+                  {Object.entries(cart).map(([id, qty]) => {
+                    const p = products.find((x) => x.id === id);
+                    if (!p) return null;
+                    return (
+                      <HStack key={id} justifyContent="space-between" py={2} borderBottomWidth="1px" borderColor="gray.100">
+                        <Box>
+                          <Text fontSize="sm">{p.name}</Text>
+                          <Text fontSize="xs" color="gray.500">${p.price.toFixed(2)} × {qty}</Text>
+                        </Box>
+
+                        <HStack>
+                          <Button size="sm" aria-label={`Decrease ${p.name} quantity`} onClick={() => remove(id)}>-</Button>
+                          <Text w="6" textAlign="center">{qty}</Text>
+                          <Button size="sm" aria-label={`Increase ${p.name} quantity`} onClick={() => add(id)}>+</Button>
+                        </HStack>
+                      </HStack>
+                    );
+                  })}
+                </Box>
+              )}
+            </Box>
+
+            <Box mt={3} display="flex" alignItems="center" justifyContent="space-between">
+              <Text fontSize="sm" fontWeight="medium">Total</Text>
+              <Text fontSize="sm" fontWeight="medium">${total.toFixed(2)}</Text>
+            </Box>
+
+            <Box mt={3} display="flex" gap={2}>
+              <Button flex={1} variant="outline" onClick={onClose}>Close</Button>
+              <Button flex={1} colorScheme="teal" onClick={placeOrder}>Order</Button>
+            </Box>
+          </Box>
+        </Box>
+      )}
+    </Box>
+  );
+}
