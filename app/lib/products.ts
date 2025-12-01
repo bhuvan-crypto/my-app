@@ -4,6 +4,7 @@ export type Product = {
   price: number;
   description?: string;
   image?: string;
+  stockQuantity?: number;
 };
 
 export const PRODUCTS: Product[] = [

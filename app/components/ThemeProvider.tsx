@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { ChakraProvider, Button, Box, defaultSystem, defaultConfig } from "@chakra-ui/react";
 import { createSystem } from "@chakra-ui/react";
+import { Toaster } from "./toaster";
 
 const system = createSystem(defaultConfig );
 
@@ -43,6 +44,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
     <ChakraProvider value={system}>
       {children}
       <Toggle />
+      <Toaster />
     </ChakraProvider>
   );
 }

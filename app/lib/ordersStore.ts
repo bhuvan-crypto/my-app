@@ -26,18 +26,13 @@ type OrdersState = {
 };
 
 const useOrders = create<OrdersState>()(
-  persist(
     (set, get) => ({
       orders: [],
       add: (o) => set({ orders: [...get().orders, o] }),
       remove: (id) => set({ orders: get().orders.filter((x) => x.id !== id) }),
       clear: () => set({ orders: [] }),
       set: (items) => set({ orders: items }),
-    }),
-    {
-      name: "app-orders",
-    }
-  )
+    })
 );
 
 export default useOrders;

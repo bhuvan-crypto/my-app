@@ -8,9 +8,9 @@ interface User {
 }
 
 interface AuthState {
-  accessToken: string | null;
-  refreshToken: string | null;
-  user: User | null;
+  accessToken: string;
+  refreshToken: string;
+  user: User;
 
   setAuth: (access: string, refresh: string, user: User) => void;
   logout: () => void;
@@ -19,17 +19,30 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      accessToken: null,
-      refreshToken: null,
-      user: null,
+      accessToken: "",
+      refreshToken: "",
+      user: {
+        username: "",
+        id: "",
+        role: ""
+      },
 
       setAuth: (access, refresh, user) =>
         set({ accessToken: access, refreshToken: refresh, user }),
 
-      logout: () => set({ accessToken: null, refreshToken: null, user: null }),
+      logout: () => set({
+        accessToken: '', refreshToken: '', user: {
+          username: "",
+          id: "",
+          role: ""
+        }
+      }),
     }),
     {
       name: "auth-storage", // store in localStorage automatically
     }
   )
 );
+
+
+

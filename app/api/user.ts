@@ -5,7 +5,7 @@ import { useAuthStore } from "../lib/authStore";
 export async function login(username: string, password: string,errCallback?:any) {
     const res = await apiPost<
         {
-            accessToken: string; refreshToken: string; user: {
+            access_token: string; refreshToken: string; user: {
                 "username": string,
                 "id": string,
                 "role": string
@@ -19,7 +19,7 @@ export async function login(username: string, password: string,errCallback?:any)
 
     if (res.success) {
         useAuthStore.getState().setAuth(
-            res.data.accessToken,
+            res.data.access_token,
             res.data.refreshToken,
             res.data.user
         );

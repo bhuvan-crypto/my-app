@@ -2,9 +2,7 @@
 
 import {
   Field,
-  FieldLabel,
-  FieldErrorText,
-  Input,
+  Input
 } from "@chakra-ui/react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -25,18 +23,12 @@ export default function FormInput({ name, label, type = "text", placeholder }: P
         name={name}
         render={({ field, fieldState: { error } }) => (
           <Field.Root invalid={!!error}>
-            <FieldLabel>{label}</FieldLabel>
-
-            <Input
-              {...field}
+            <Field.Label>{label}</Field.Label>
+            <Input  {...field}
               type={type}
               placeholder={placeholder}
-              _invalid={{ borderColor: "red.500" }} // Chakra v3 pattern
-            />
-
-            {error && (
-              <FieldErrorText>{error.message}</FieldErrorText>
-            )}
+              _invalid={{ borderColor: "red.500" }} />
+            <Field.ErrorText>{error?.message}</Field.ErrorText>
           </Field.Root>
         )}
       />

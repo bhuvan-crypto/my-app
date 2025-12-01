@@ -19,6 +19,10 @@ export default function LoginPage() {
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     mode: "onBlur",
+    defaultValues: {
+    username: "",
+    password: "",
+  },
   });
 
   const {
@@ -50,7 +54,7 @@ export default function LoginPage() {
             <Heading>Sign In</Heading>
 
             <FormProvider {...form}>
-              <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+              <Box as="form" onSubmit={handleSubmit(onSubmit)} w="full">
                 <VStack gap={4}>
                   <FormInput
                     name="username"
@@ -74,7 +78,7 @@ export default function LoginPage() {
                     Sign In
                   </Button>
                 </VStack>
-              </form>
+              </Box>
             </FormProvider>
           </VStack>
         </Box>
