@@ -1,28 +1,33 @@
 "use client";
 
+import FormInput from "@/app/components/FormInput";
+import { loginSchema, LoginSchema } from "@/app/schemas/login.schema";
 import {
   Box,
   Button,
   Container,
+  Group,
   Heading,
+  Input,
   VStack
 } from "@chakra-ui/react";
-import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormInput from "@/app/components/FormInput";
-import { login } from "../api/user";
 import { useRouter } from "next/navigation";
-import { loginSchema, LoginSchema } from "@/app/schemas/login.schema";
+import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { login } from "../api/user";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [show, setShow] = useState(false);
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     mode: "onBlur",
     defaultValues: {
-    username: "",
-    password: "",
-  },
+      username: "",
+      password: "",
+    },
   });
 
   const {
@@ -67,6 +72,22 @@ export default function LoginPage() {
                     label="Password"
                     type="password"
                     placeholder="••••••••"
+                    renderInput={(field, error) => (
+                      <Group attached w="full" maxW="sm">
+                        <Input
+                          {...field}
+                          type={show ? "text" : "password"}
+                          placeholder="••••••••"
+                        />
+                        <Button bg="bg.subtle" variant="outline" borderColor={!!error ? "red.500" : undefined} onClick={() => setShow(!show)}>
+                          {!show ? (
+                            <AiFillEyeInvisible size={18} />
+                          ) : (
+                            <AiFillEye size={18} />
+                          )}
+                        </Button>
+                      </Group>
+                    )}
                   />
 
                   <Button

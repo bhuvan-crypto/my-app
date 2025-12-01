@@ -40,7 +40,7 @@ api.interceptors.response.use(
   },
   async (error: AxiosError<ApiError>) => {
     const errResponse = error.response?.data;
-    const operation = error.config?.operation as string;
+    const operation = error.config?.operation as IOpTypes;
     const errCallback = error.config?.errCallback;
     if (errResponse?.errors && errCallback) {
       for (const [field, message] of Object.entries(errResponse.errors)) {
@@ -71,7 +71,7 @@ export async function apiGet<T>(url: string, config: { operation: IOpTypes }
 export async function apiPost<T, B>(
   url: string,
   body: B,
-  config: { operation: IOpTypes, errCallback: any }
+  config: { operation: IOpTypes, errCallback?: any }
 ): Promise<ApiResponse<T>> {
   const res = await api.post(url, body, config);
   return res.data;

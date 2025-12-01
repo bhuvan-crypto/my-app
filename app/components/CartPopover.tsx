@@ -19,14 +19,13 @@ export default function CartPopover() {
   const auth = useAuthStore();
   const isAdding = useAppLoading((s) => s.isActionLoading("Cart Item add"));
   const isRemoving = useAppLoading((s) => s.isActionLoading("Cart Item delete"));
+  const isOrdering = useAppLoading((s) => s.isActionLoading("Order placing"));
   const { open, onOpen, onClose } = useDisclosure();
   const cart = useCart((s) => s.cart);
   const add = useCart((s) => s.add);
   const fetchCart = useCart((s) => s.fetchCart);
-
+  const placeOrder = useOrders((s) => s.add);
   const remove = useCart((s) => s.remove);
-  const clear = useCart((s) => s.clear);
-  const addOrder = useOrders((s) => s.add);
 
   const count = Object.values(cart).reduce((sum, v) => sum + v.quantity, 0);
   const products: Product[] = useProducts((s: any) => s.products);
@@ -35,28 +34,7 @@ export default function CartPopover() {
     return sum + (p ? p.price * q.quantity : 0);
   }, 0);
 
-  function placeOrder() {
-    // if (count === 0) {
-    //   alert('Your cart is empty');
-    //   return;
-    // }
-    // // build order snapshot
-    // const orderItems = Object.entries(cart)
-    //   .map(([id, qty]) => {
-    //     const p = products.find((x) => x.id === id);
-    //     if (!p) return null;
-    //     return { id: p.id, name: p.name, price: p.price, qty };
-    //   })
-    //   .filter(Boolean) as { id: string; name: string; price: number; qty: number }[];
-
-    // const orderTotal = orderItems.reduce((s, it) => s + it.price * it.qty, 0);
-    // const order = { id: `o${Date.now()}`, items: orderItems, total: orderTotal, createdAt: Date.now() };
-    // addOrder(order);
-
-    // alert('Order placed — thank you!');
-    // clear();
-    // onClose();
-  }
+ 
 
   useEffect(() => {
     fetchCart(auth.user.id);
@@ -108,7 +86,7 @@ export default function CartPopover() {
 
             <Box mt={3} display="flex" gap={2}>
               <Button flex={1} variant="outline" onClick={onClose}>Close</Button>
-              <Button flex={1} colorScheme="teal" onClick={placeOrder}>Order</Button>
+              <Button flex={1} colorScheme="teal" onClick={placeOrder} loading={isOrdering}>Order</Button>
             </Box>
           </Box>
         </Box>
