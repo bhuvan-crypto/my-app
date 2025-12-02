@@ -21,6 +21,13 @@ export const useAppLoading = create<LoadingState>((set, get) => ({
         "Ecommerce API": false,
         "Login": false,
         "getProducts": false,
+        "Signup": false,
+        "Product add": false,
+        "Product update": false,
+        "Product delete": false,
+        "Order placing": false,
+        "Order delete": false,
+        "Order fetching": false,
     },
     setGlobalLoading: (value) => set({ globalLoading: value }),
 
