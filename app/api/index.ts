@@ -76,6 +76,14 @@ export async function apiPost<T, B>(
   const res = await api.post(url, body, config);
   return res.data;
 }
+export async function apiPatch<T, B>(
+  url: string,
+  body: B,
+  config: { operation: IOpTypes, errCallback?: any }
+): Promise<ApiResponse<T>> {
+  const res = await api.patch(url, body, config);
+  return res.data;
+}
 
 export async function apiPut<T, B>(
   url: string,

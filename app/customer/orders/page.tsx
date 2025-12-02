@@ -14,6 +14,7 @@ export default function CustomerOrders() {
   const cancel = useOrders((s) => s.remove);
   const fetch = useOrders((s) => s.fetchOrders);
   const loading = useAppLoading((s) => s.isActionLoading("Order fetching"));
+  const isCancelling = useAppLoading((s) => s.isActionLoading("Order delete"));
   React.useEffect(() => {
     fetch();
   }, []);
@@ -30,7 +31,7 @@ export default function CustomerOrders() {
           </Link>
         </HStack>
 
-        {loading ? (
+        {loading || isCancelling ? (
           <VStack gap={4} align="stretch">
             {Array.from({ length: 3 }).map((_, i) => (
               <OrderCardSkeleton key={i} />

@@ -1,19 +1,19 @@
 import { apiDelete, apiGet, apiPost } from ".";
+import { IProduct } from "./products";
 
 
 export interface IOrders {
-  _id: string;
-  customer_id: string;
-  product_id: string;
-  quantity: number;
-  is_deleted: boolean;
-  sum: number;
-  created_at: string;   // from DB
-  __v: number;
-  createdAt: string;    // mongoose timestamp
-  updatedAt: string;    // mongoose timestamp
+    _id: string;
+    customer_id: string;
+    product: IProduct;
+    quantity: number;
+    is_deleted: boolean;
+    sum: number;
+    created_at: string;
+    __v: number;
+    createdAt: string;
+    updatedAt: string;
 }
-
 
 
 export async function addItem() {

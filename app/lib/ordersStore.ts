@@ -49,9 +49,9 @@ const useOrders = create<OrdersState>()(
         mapped.push({
           id: item._id,
           items: [{
-            id: item.product_id,
-            name: "Product " + item.product_id,
-            price: item.sum,
+            id: item.product._id,
+            name: "Product " + item.product.name,
+            price: item.product.price,
             qty: item.quantity,
           }],
           total: item.sum,

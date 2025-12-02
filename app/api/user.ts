@@ -2,7 +2,7 @@ import { apiPost } from ".";
 import { useAuthStore } from "../lib/authStore";
 
 
-export async function login(username: string, password: string,errCallback?:any) {
+export async function login(username: string, password: string, errCallback?: any) {
     const res = await apiPost<
         {
             access_token: string; refreshToken: string; user: {
@@ -24,6 +24,17 @@ export async function login(username: string, password: string,errCallback?:any)
             res.data.user
         );
     }
+
+    return res;
+}
+export async function signup(username: string, password: string, role: "customer" | "admin", errCallback?: any) {
+    const res = await apiPost<
+        {},
+        any
+    >("/users", { username, password, role }, {
+        operation: "Signup",
+        errCallback
+    });
 
     return res;
 }

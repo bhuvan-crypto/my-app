@@ -3,13 +3,12 @@
 import { persist } from "zustand/middleware";
 import { Product, PRODUCTS } from "./products";
 import { create } from "zustand";
-import { getProducts } from "../api/products";
+import { addProduct, deleteProduct, getProducts, ICreateProduct, updateProduct } from "../api/products";
 
 type ProductsState = {
   products: Product[];
-  add: (p: Omit<Product, "id">) => void;
+  add: (p: ICreateProduct) => void;
   remove: (id: string) => void;
-  update: (id: string, p: Partial<Product>) => void;
   set: (items: Product[]) => void;
   fetchProducts: () => Promise<void>;
 };
@@ -17,13 +16,14 @@ type ProductsState = {
 const useProducts = create<ProductsState>()(
   (set, get) => ({
     products: [],
-    add: (p) => {
-      const id = `p${Date.now()}`;
-      const item: Product = { id, ...p } as Product;
-      set({ products: [...get().products, item] });
+    add: async (data: ICreateProduct) => {
+      await addProduct(data);
+      await get().fetchProducts();
     },
-    update: (id, p) => set({ products: get().products.map((x) => (x.id === id ? { ...x, ...p } : x)) }),
-    remove: (id) => set({ products: get().products.filter((x) => x.id !== id) }),
+    remove: async (id) => {
+      await deleteProduct(id);
+      await get().fetchProducts();
+    },
     set: (items) => set({ products: items }),
     fetchProducts: async () => {
       const res = await getProducts();
@@ -43,7 +43,7 @@ const useProducts = create<ProductsState>()(
             updatedAt: p.updated_at,
           }))
         });
-      } 
+      }
     },
   })
 );

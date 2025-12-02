@@ -5,6 +5,7 @@ export type Product = {
   description?: string;
   image?: string;
   stockQuantity?: number;
+  categoryId?: string;
 };
 
 export const PRODUCTS: Product[] = [
