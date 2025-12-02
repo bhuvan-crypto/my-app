@@ -7,7 +7,7 @@ import { ICreateProduct, updateProduct } from "../api/products";
 import { useAuthStore } from "../lib/authStore";
 import { PRODUCTS } from "../lib/products";
 import useProducts from "../lib/productsStore";
-import ProductForm from "./ProductForm";
+import ProductForm from "../components/ProductForm";
 import { useAppLoading } from "../api/loadingStore";
 
 export default function AdminPage() {
@@ -15,7 +15,6 @@ export default function AdminPage() {
   const signOut = useAuthStore((s) => s.logout);
   const fetch = useProducts((s) => s.fetchProducts);
   const setProducts = useProducts((s: any) => s.set);
-  const update = useProducts((s: any) => s.update);
   const remove = useProducts((s: any) => s.remove);
   const isUpdating = useAppLoading((s) => s.isActionLoading("Product update"));
   const isAdding = useAppLoading((s) => s.isActionLoading("Product add"));
@@ -27,12 +26,13 @@ export default function AdminPage() {
   }, []);
 
   return (
-    <Box minH="100vh" py={12} px={6} bg="gray.50" _dark={{ bg: 'gray.900' }}>
+    <Box h="90vh" minW={"40vw"} py={12} px={6} bg="gray.50" _dark={{ bg: 'gray.900' }} overflow={"auto"}>
       <Container maxW="4xl">
         <HStack justify="space-between" mb={6}>
           <Heading>Admin — Manage Products</Heading>
           <HStack>
             <Link href="/"><Button variant="ghost">Home</Button></Link>
+            {/* <Link href="/admin/analytics"><Button variant="ghost">Analytics</Button></Link> */}
             <Button colorScheme="red" onClick={signOut}>Sign out</Button>
           </HStack>
         </HStack>

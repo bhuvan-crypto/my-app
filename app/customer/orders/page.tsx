@@ -19,7 +19,7 @@ export default function CustomerOrders() {
     fetch();
   }, []);
   return (
-    <Box minH="100vh" bg="gray.50" _dark={{ bg: 'gray.900' }} py={12} px={6}>
+    <Box minH="80vh" minW={"30vw"} bg="gray.50" _dark={{ bg: 'gray.900' }} py={12} px={6}>
       <Container maxW="5xl" marginX={"auto"}>
         <HStack justify="space-between" mb={8}>
           <Box>

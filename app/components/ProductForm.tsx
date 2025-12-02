@@ -3,7 +3,7 @@
 import { Button, Textarea, VStack } from "@chakra-ui/react";
 import { useForm, FormProvider, UseFormSetError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormInput from "../components/FormInput";
+import FormInput from "./FormInput";
 import { ProductSchema, productSchema } from "../schemas/product.schema";
 import { Product } from "../lib/products";
 
@@ -39,7 +39,7 @@ export default function ProductForm({
         <FormProvider {...methods}>
             <form onSubmit={handleSubmit((data) => onSubmit(data, setError))}>
                 <VStack align="stretch">
-                    <FormInput name="name" label="Product Name" placeholder="Product name" />
+                    <FormInput name="name" label="Product Name" placeholder="Product name" type={"text"} />
 
                     <FormInput
                         name="price"
@@ -55,6 +55,7 @@ export default function ProductForm({
                         renderInput={(field) => (
                             <Textarea {...field} placeholder="Enter description" />
                         )}
+                        type={"text"}
                     />
 
                     <FormInput
@@ -68,6 +69,7 @@ export default function ProductForm({
                         name="category_id"
                         label="Category Id"
                         placeholder="Category ID"
+                        type={"text"}
                     />
 
                     <VStack align="stretch" mt={3}>

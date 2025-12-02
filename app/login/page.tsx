@@ -1,13 +1,18 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { FaRegUser } from "react-icons/fa";
 
 import {
   Box,
+  Button,
+  Heading,
+  HStack,
   Tabs,
   TabsContent,
   TabsList,
-  TabsTrigger
+  TabsTrigger,
+  VStack
 } from "@chakra-ui/react";
 
 import AuthForm from "@/app/components/AuthForm";
@@ -16,12 +21,15 @@ import { loginSchema, LoginSchema } from "@/app/schemas/login.schema";
 import { signupSchema, SignupSchema } from "@/app/schemas/signup.schema";
 
 import { login, signup } from "@/app/api/user";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { UseFormSetValue } from "react-hook-form";
+import { LoginStyle } from "../components/LoginStyle";
 
 
 export default function AuthPage() {
   const router = useRouter();
   const [value, setValue] = useState<"login" | "signup">("login")
+  const fill = useRef<UseFormSetValue<LoginSchema> | null>(null);
 
   /* ------------------ LOGIN SUBMIT ------------------ */
   async function onLogin(values: LoginSchema) {
@@ -41,25 +49,20 @@ export default function AuthPage() {
       values.role,
     );
     if (res.success) {
-    setValue("login");
+      setValue("login");
     }
   }
 
   return (
-    <Box
-      h="100vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      p={4}
-    >
+
       <Tabs.Root
         defaultValue="login"
-        maxW="450px"
         w="100%"
+        minW={"23vw"}
         borderWidth="1px"
         borderRadius="md"
         p={4}
+        fitted
         value={value} onValueChange={(e) => setValue(e.value.toString() as "login" | "signup")}
       >
         <TabsList mb={4}>
@@ -73,33 +76,46 @@ export default function AuthPage() {
 
         {/* ------------------ LOGIN TAB ------------------ */}
         <TabsContent value="login">
-          <AuthForm<LoginSchema>
-            title="Sign In"
-            schema={loginSchema}
-            defaultValues={{
-              username: "",
-              password: "",
-            }}
-            onSubmit={onLogin}
-            fields={[
-              {
-                name: "username",
-                label: "Username",
-                placeholder: "admin@example.com",
-                type: "text",
-              },
-              {
-                name: "password",
-                label: "Password",
-                type: "password",
-                placeholder: "••••••••",
-              },
-            ]}
-          />
+          <VStack gap={2}>
+            <HStack> <Button background="Highlight" onClick={() => {
+              fill.current?.("username", "hj67412200@gmail.com");
+              fill.current?.("password", "Test@123");
+            }}>Fill Test customer Account</Button>
+              <Button background="Highlight" onClick={() => {
+                fill.current?.("username", "admin@gmail.com");
+                fill.current?.("password", "Test@123");
+              }}>Fill Test admin Account</Button></HStack>
+            <AuthForm<LoginSchema>
+              title="Sign In"
+              schema={loginSchema}
+              defaultValues={{
+                username: "",
+                password: "",
+              }}
+              onSubmit={onLogin}
+              fields={[
+                {
+                  name: "username",
+                  label: "Username",
+                  placeholder: "admin@example.com",
+                  type: "text",
+                },
+                {
+                  name: "password",
+                  label: "Password",
+                  type: "password",
+                  placeholder: "••••••••",
+                },
+              ]}
+              onFill={(setValue) => (fill.current = setValue)}
+            />
+          </VStack >
         </TabsContent>
+
 
         {/* ------------------ SIGNUP TAB ------------------ */}
         <TabsContent value="signup">
+
           <AuthForm<SignupSchema>
             title="Sign Up"
             schema={signupSchema}
@@ -146,6 +162,5 @@ export default function AuthPage() {
 
         </TabsContent>
       </Tabs.Root>
-    </Box>
   );
 }

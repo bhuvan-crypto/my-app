@@ -24,22 +24,9 @@ export default function CustomerDashboard() {
     auth.logout();
   }
 
-  if (!auth || auth.user?.role !== "customer") {
-    return (
-      <Box minH="100vh" display="flex" alignItems="center" justifyContent="center" bg="gray.50" _dark={{ bg: 'gray.900' }} px={6}>
-        <Box maxW="md" p={8} textAlign="center" bg="white" _dark={{ bg: 'gray.800' }} borderRadius="md" shadow="md">
-          <Heading size="lg" mb={4}>Access denied</Heading>
-          <Text mb={6} color="gray.600" _dark={{ color: 'gray.400' }}>You must sign in as a customer to view this page.</Text>
-          <Link href="/login">
-            <Button w="full" colorScheme="teal">Sign in</Button>
-          </Link>
-        </Box>
-      </Box>
-    );
-  }
 
   return (
-    <Box minH="100vh" bg="gray.50" _dark={{ bg: 'gray.900' }} py={12} px={6} display={"flex"}>
+    <Box minH="80vh" bg="gray.50" minW={"40vw"} _dark={{ bg: 'gray.900' }} py={12} px={6} display={"flex"}>
       <Container maxW="5xl" marginX={"auto"}>
         <HStack justify="space-between" mb={8} align="flex-start">
           <Box>
