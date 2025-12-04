@@ -2,8 +2,8 @@
 
 import { Box, Button, Container, Heading, HStack, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
-import type { Order } from "../../../../lib/ordersStore";
-import useOrders from "../../../../lib/ordersStore";
+import type { Order } from "../../../lib/ordersStore";
+import useOrders from "../../../lib/ordersStore";
 import OrderCard from "./OrderCard";
 import React from "react";
 import OrderCardSkeleton from "./OrderCardSkeleton";
@@ -19,7 +19,7 @@ export default function CustomerOrders() {
     fetch();
   }, []);
   return (
-    <Box minH="80vh" minW={"30vw"} bg="gray.50" _dark={{ bg: 'gray.900' }} py={12} px={6}>
+    <Box minH="80vh" minW={"30vw"} bg="gray.50" _dark={{ bg: 'gray.900' }} py={12} px={6} margin={"auto"}>
       <Container maxW="5xl" marginX={"auto"}>
         <HStack justify="space-between" mb={8}>
           <Box>

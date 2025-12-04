@@ -1,11 +1,10 @@
 "use client";
-
 import { useAuthStore } from "@/lib/authStore";
 import { Box, Button, Container, Heading, HStack, SimpleGrid, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect } from "react";
-import CartPopover from "../../../components/CartPopover";
-import useProducts from "../../../lib/productsStore";
+import CartPopover from "../../components/CartPopover";
+import useProducts from "../../lib/productsStore";
 import { ProductCard } from "../admin/components/ProductCard";
 import { ProductSkeleton } from "../admin/components/ProductSkeleton";
 import { useAppLoading } from "@/types/api/loadingStore";
@@ -24,9 +23,8 @@ export default function CustomerDashboard() {
     auth.logout();
   }
 
-
   return (
-    <Box minH="80vh" bg="gray.50" minW={"40vw"} _dark={{ bg: 'gray.900' }} py={12} px={6} display={"flex"}>
+    <Box minH="80vh" bg="gray.50" minW={"40vw"} _dark={{ bg: 'gray.900' }} py={12} px={6} display={"flex"} margin={"auto"}>
       <Container maxW="5xl" marginX={"auto"}>
         <HStack justify="space-between" mb={8} align="flex-start">
           <Box>

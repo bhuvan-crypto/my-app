@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "../../../lib/authStore";
+import { useAuthStore } from "../../lib/authStore";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
