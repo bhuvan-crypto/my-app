@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getCartItems, CartAggregation, addItem, deleteItem } from "../types/api/cart";
+import { getCartItems, CartAggregation, addItem, deleteItem } from "../api/cart";
 import useProducts from "./productsStore";
 
 type CartState = {

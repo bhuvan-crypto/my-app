@@ -1,5 +1,5 @@
 import { apiPost } from ".";
-import { useAuthStore } from "../../lib/authStore";
+import { useAuthStore } from "../lib/authStore";
 
 
 export async function login(username: string, password: string, errCallback?: any) {

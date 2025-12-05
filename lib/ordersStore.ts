@@ -2,7 +2,7 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { addItem, deleteItem, getItems } from "../types/api/order";
+import { addItem, deleteItem, getItems } from "../api/order";
 import { useCart } from "./cartStore";
 import { useAuthStore } from "./authStore";
 

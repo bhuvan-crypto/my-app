@@ -2,18 +2,22 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface User {
-  "username": string,
-  "id": string,
-  "role": string
+  username: string;
+  id: string;
+  role: string;
 }
 
 interface AuthState {
   accessToken: string;
   refreshToken: string;
   user: User;
+  
+  // New hydration state
+  _hasHydrated: boolean; 
 
   setAuth: (access: string, refresh: string, user: User) => void;
   logout: () => void;
+  setHydrated: (state: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -26,6 +30,7 @@ export const useAuthStore = create<AuthState>()(
         id: "",
         role: ""
       },
+      _hasHydrated: false, // Default to false
 
       setAuth: (access, refresh, user) =>
         set({ accessToken: access, refreshToken: refresh, user }),
@@ -37,12 +42,15 @@ export const useAuthStore = create<AuthState>()(
           role: ""
         }
       }),
+
+      setHydrated: (state) => set({ _hasHydrated: state }),
     }),
     {
-      name: "auth-storage", // store in localStorage automatically
+      name: "auth-storage",
+      // This callback runs when data has been loaded from localStorage
+      onRehydrateStorage: () => (state) => {
+        state?.setHydrated(true);
+      },
     }
   )
 );
-
-
-

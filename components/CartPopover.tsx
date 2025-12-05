@@ -13,7 +13,7 @@ import useProducts from '../lib/productsStore';
 import useOrders from '../lib/ordersStore';
 import type { Product } from '../lib/products';
 import { useAuthStore } from '../lib/authStore';
-import { useAppLoading } from '../types/api/loadingStore';
+import { useAppLoading } from '../api/loadingStore';
 
 export default function CartPopover() {
   const auth = useAuthStore();

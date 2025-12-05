@@ -1,14 +1,12 @@
 import { create } from "zustand";
-import { IOpTypes } from "../axios";
+import { IOpTypes } from "../types/axios";
 
 interface LoadingState {
     globalLoading: boolean;
     loadingMap: Record<IOpTypes, boolean>;
-
     setGlobalLoading: (value: boolean) => void;
     startAction: (key: IOpTypes) => void;
     endAction: (key: IOpTypes) => void;
-
     isActionLoading: (key: IOpTypes) => boolean;
 }
 
@@ -28,6 +26,7 @@ export const useAppLoading = create<LoadingState>((set, get) => ({
         "Order placing": false,
         "Order delete": false,
         "Order fetching": false,
+        "Analytics fetch": false
     },
     setGlobalLoading: (value) => set({ globalLoading: value }),
 

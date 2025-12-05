@@ -3,23 +3,34 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "../../lib/authStore";
+import { Center, Spinner } from "@chakra-ui/react";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function CustomerLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { accessToken, user } = useAuthStore();
+  const { accessToken, user, _hasHydrated } = useAuthStore();
 
   useEffect(() => {
-    // Not logged in → go to login
+    if (!_hasHydrated) return;
+
     if (!accessToken) {
       router.replace("/");
       return;
     }
 
-    // Logged in but wrong role → redirect
     if (user.role !== "customer") {
       router.replace("/admin");
     }
-  }, [accessToken, user, router]);
+  }, [accessToken, user, router, _hasHydrated]);
+
+  if (!_hasHydrated) {
+    return (
+      <Center h="100vh" w={"full"}>
+        <Spinner size="xl" />
+      </Center>
+    );
+  }
+
+  if (!accessToken || user.role !== "customer") return null;
 
   return <>{children}</>;
 }

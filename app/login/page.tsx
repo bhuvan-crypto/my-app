@@ -1,12 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FaRegUser } from "react-icons/fa";
 
 import {
-    Box,
     Button,
-    Heading,
     HStack,
     Tabs,
     TabsContent,
@@ -20,10 +17,10 @@ import AuthForm from "@/components/AuthForm";
 import { loginSchema, LoginSchema } from "@/schemas/login.schema";
 import { signupSchema, SignupSchema } from "@/schemas/signup.schema";
 
-import { login, signup } from "@/types/api/user";
+import { login, signup } from "@/api/user";
+import { useAuthStore } from "@/lib/authStore";
 import { useEffect, useRef, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { useAuthStore } from "@/lib/authStore";
 
 
 export default function AuthPage() {

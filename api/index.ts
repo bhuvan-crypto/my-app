@@ -1,10 +1,10 @@
 import axios, { AxiosError } from "axios";
 import { ApiError, ApiResponse } from "./api-response";
-import { useAuthStore } from "../../lib/authStore";
-import { API_BASE_URL } from "../../config";
-import { toaster } from "../../components/toaster";
+import { useAuthStore } from "../lib/authStore";
+import { API_BASE_URL } from "../config";
+import { toaster } from "../components/toaster";
 import { useAppLoading } from "./loadingStore";
-import { IOpTypes } from "../axios";
+import { IOpTypes } from "../types/axios";
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

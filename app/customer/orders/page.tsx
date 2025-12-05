@@ -7,7 +7,7 @@ import useOrders from "../../../lib/ordersStore";
 import OrderCard from "./OrderCard";
 import React from "react";
 import OrderCardSkeleton from "./OrderCardSkeleton";
-import { useAppLoading } from "@/types/api/loadingStore";
+import { useAppLoading } from "@/api/loadingStore";
 
 export default function CustomerOrders() {
   const orders = useOrders((s) => s.orders ?? []);

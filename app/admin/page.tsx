@@ -3,12 +3,12 @@
 import { Box, Button, Container, Heading, HStack, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ICreateProduct, updateProduct } from "../../types/api/products";
+import { ICreateProduct, updateProduct } from "../../api/products";
 import { useAuthStore } from "../../lib/authStore";
 import { PRODUCTS } from "../../lib/products";
 import useProducts from "../../lib/productsStore";
 import ProductForm from "../../components/ProductForm";
-import { useAppLoading } from "../../types/api/loadingStore";
+import { useAppLoading } from "../../api/loadingStore";
 
 export default function AdminPage() {
   const products = useProducts((s) => s.products);

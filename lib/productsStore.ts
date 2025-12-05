@@ -3,7 +3,7 @@
 import { persist } from "zustand/middleware";
 import { Product, PRODUCTS } from "./products";
 import { create } from "zustand";
-import { addProduct, deleteProduct, getProducts, ICreateProduct, updateProduct } from "../types/api/products";
+import { addProduct, deleteProduct, getProducts, ICreateProduct, updateProduct } from "../api/products";
 
 type ProductsState = {
   products: Product[];

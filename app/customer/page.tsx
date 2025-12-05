@@ -7,7 +7,7 @@ import CartPopover from "../../components/CartPopover";
 import useProducts from "../../lib/productsStore";
 import { ProductCard } from "../admin/components/ProductCard";
 import { ProductSkeleton } from "../admin/components/ProductSkeleton";
-import { useAppLoading } from "@/types/api/loadingStore";
+import { useAppLoading } from "@/api/loadingStore";
 
 export default function CustomerDashboard() {
   const auth = useAuthStore();
