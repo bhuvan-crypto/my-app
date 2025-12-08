@@ -2,13 +2,14 @@
 
 import { Box, Button, Container, Heading, HStack, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ICreateProduct, updateProduct } from "../../api/products";
 import { useAuthStore } from "../../lib/authStore";
 import { PRODUCTS } from "../../lib/products";
 import useProducts from "../../lib/productsStore";
 import ProductForm from "../../components/ProductForm";
 import { useAppLoading } from "../../api/loadingStore";
+import AnalyticsPage from "./components/analytics/page";
 
 export default function AdminPage() {
   const products = useProducts((s) => s.products);
@@ -24,65 +25,59 @@ export default function AdminPage() {
   useEffect(() => {
     fetch();
   }, []);
+  const editProduct = useMemo(() => {
+    return products.find((p) => p.id === editingId)
+  }, [editingId])
+
 
   return (
-    <Box h="90vh" minW={"40vw"} py={12} px={6} bg="gray.50" _dark={{ bg: 'gray.900' }} overflow={"auto"}         margin={"auto"}
->
-      <Container maxW="4xl">
-        <HStack justify="space-between" mb={6}>
-          <Heading>Admin — Manage Products</Heading>
-          <HStack>
-            <Link href="/"><Button variant="ghost">Home</Button></Link>
-             <Link href="/admin/analytics"><Button variant="ghost">Analytics</Button></Link> 
-            <Button colorScheme="red" onClick={signOut}>Sign out</Button>
+    <HStack w={"full"} h={"full"} pos={"relative"}>
+      <Button colorScheme="red" pos={"absolute"}  right={0} top={0} onClick={signOut}>Sign out</Button>
+      <AnalyticsPage />
+      <Box minW={"30vw"} p={4}h={"full"}margin={"auto"}
+       borderRadius={10}>
+        <VStack maxW="4xl" h={"full"} gap={4}>
+          <HStack justify="space-between" w={"full"}>
+            <Heading>Manage Products</Heading>
+           
           </HStack>
-        </HStack>
 
-        <VStack align="stretch" >
-          {/* ADD FORM */}
-          <Box  p={4} rounded="md" borderWidth="1px">
-            <Heading size="sm" mb={3}>Add Product</Heading>
-            <ProductForm
-              submitText="Add Product"
-              onSubmit={(data) => {
-                useProducts.getState().add(data);
-              }}
-              loader={isAdding}
+          <VStack align="stretch" flex={1} overflow={"auto"} w={"full"}>
+            {/* ADD FORM */}
+            <Box p={4} rounded="md" borderWidth="1px" bg="gray.50" >
+              <Heading size="sm" mb={3}>Add Product</Heading>
+              {editProduct && editingId ? <ProductForm
+                defaultValues={editProduct}
+                submitText="Save Changes"
+                onSubmit={async (data, errFn) => {
+                  const res = await updateProduct(editingId, data, errFn);
+                  if (res.success) {
+                    setEditingId(null);
+                    fetch();
+                  }
+                }}
+                onCancel={() => setEditingId(null)}
+                loader={isUpdating}
+              /> : <ProductForm
+                submitText="Add Product"
+                onSubmit={(data) => {
+                  useProducts.getState().add(data);
+                }}
+                loader={isAdding}
+              />}
+            </Box>
 
-            />
-          </Box>
+            {/* EXISTING PRODUCTS */}
+            <Box p={4} rounded="md" borderWidth="1px" flex={1} overflow={"auto"}  bg="gray.50" >
+              <Heading size="sm" mb={3}>Existing products</Heading>
 
-          <Box display="flex" justifyContent="flex-end">
-            <Button size="sm" variant="outline" onClick={() => setProducts(PRODUCTS.slice())}>
-              Reset products
-            </Button>
-          </Box>
+              <VStack align="stretch" flex={1} overflow={"auto"}>
+                {products.length === 0 ? (
+                  <Text color="gray.600">No products.</Text>
+                ) : (
+                  products.map((p) => (
+                    <Box key={p.id}>
 
-          {/* EXISTING PRODUCTS */}
-          <Box  p={4} rounded="md" borderWidth="1px">
-            <Heading size="sm" mb={3}>Existing products</Heading>
-
-            <VStack align="stretch">
-              {products.length === 0 ? (
-                <Text color="gray.600">No products.</Text>
-              ) : (
-                products.map((p) => (
-                  <Box key={p.id}>
-                    {editingId === p.id ? (
-                      <ProductForm
-                        defaultValues={p}
-                        submitText="Save Changes"
-                        onSubmit={async (data, errFn) => {
-                          const res = await updateProduct(editingId, data, errFn);
-                          if (res.success) {
-                            setEditingId(null);
-                            fetch();
-                          }
-                        }}
-                        onCancel={() => setEditingId(null)}
-                        loader={isUpdating}
-                      />
-                    ) : (
                       <HStack justify="space-between">
                         <Box>
                           <Text fontWeight="medium">
@@ -105,14 +100,16 @@ export default function AdminPage() {
                           </Button>
                         </HStack>
                       </HStack>
-                    )}
-                  </Box>
-                ))
-              )}
-            </VStack>
-          </Box>
+
+                    </Box>
+                  ))
+                )}
+              </VStack>
+            </Box>
+          </VStack>
         </VStack>
-      </Container>
-    </Box>
+
+      </Box>
+    </HStack>
   );
 }

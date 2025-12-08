@@ -32,7 +32,7 @@ export default function AnalyticsPage() {
   }, []);
 
   return (
-    <Box p={8} w={"100%"} h={"100%"} display={"flex"} flexDirection={"column"} >
+    <Box p={8} w={"100%"} h={"100%"} display={"flex"} flexDirection={"column"} overflow={"auto"} >
       <Heading mb={6}>Analytics Dashboard</Heading>
 
       {/* Statistics Cards */}

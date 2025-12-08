@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "./FormInput";
 import { ProductSchema, productSchema } from "../schemas/product.schema";
 import { Product } from "../lib/products";
+import { useEffect } from "react";
 
 interface Props {
     defaultValues?: Partial<Product>;
@@ -33,7 +34,21 @@ export default function ProductForm({
         },
     });
 
-    const { handleSubmit, setError } = methods;
+    const { handleSubmit, setError, reset } = methods;
+
+    useEffect(() => {
+        if (defaultValues) {
+            reset(defaultValues)
+        } else {
+            reset({
+                name: "",
+                price: 0,
+                description: "",
+                stock_quantity: 0,
+                category_id: '0',
+            })
+        }
+    }, [defaultValues])
 
     return (
         <FormProvider {...methods}>
