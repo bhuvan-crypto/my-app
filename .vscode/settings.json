@@ -1,0 +1,7 @@
+{
+    "chat.mcp.serverSampling": {
+        "my-app/.vscode/mcp.json: chakra-ui": {
+            "allowedModels": []
+        }
+    }
+}
