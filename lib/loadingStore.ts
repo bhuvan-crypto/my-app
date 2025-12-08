@@ -26,7 +26,8 @@ export const useAppLoading = create<LoadingState>((set, get) => ({
         "Order placing": false,
         "Order delete": false,
         "Order fetching": false,
-        "Analytics fetch": false
+        "Analytics fetch": false,
+        "Activity fetch":false
     },
     setGlobalLoading: (value) => set({ globalLoading: value }),
 

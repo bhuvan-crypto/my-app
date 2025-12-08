@@ -3,7 +3,7 @@ import { ApiError, ApiResponse } from "./api-response";
 import { useAuthStore } from "../lib/authStore";
 import { API_BASE_URL } from "../config";
 import { toaster } from "../components/toaster";
-import { useAppLoading } from "./loadingStore";
+import { useAppLoading } from "../lib/loadingStore";
 import { IOpTypes } from "../types/axios";
 
 export const api = axios.create({

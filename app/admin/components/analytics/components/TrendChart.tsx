@@ -19,7 +19,7 @@ import {
 
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { useAnalyticsStore } from "@/lib/analyticsStore"; // Import store
-import { useAppLoading } from "@/api/loadingStore";
+import { useAppLoading } from "@/lib/loadingStore";
 
 export default function TrendChart() {
   // 1. Connect to Store

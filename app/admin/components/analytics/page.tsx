@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Box, Heading, ButtonGroup, Button, Text, SimpleGrid, Spinner, Center } from "@chakra-ui/react";
-import { useAppLoading } from "@/api/loadingStore";
+import { useAppLoading } from "@/lib/loadingStore";
 import { useAnalyticsStore } from "@/lib/analyticsStore";
 import DeviceChart from "./components/DeviceChart";
 import HeatmapChart from "./components/HeatmapChart";
@@ -23,8 +23,8 @@ export default function AnalyticsPage() {
   }, []);
 
   return (
-    <Box p={8} w={"100%"} h={"100%"} display={"flex"} flexDirection={"column"} overflow={"auto"} >
-      <Heading mb={6}>Analytics Dashboard</Heading>
+    <Box p={4} w={"100%"} h={"100%"} display={"flex"} flexDirection={"column"} overflow={"auto"} gap={4} >
+      <Heading >Analytics Dashboard</Heading>
 
       {/* Statistics Cards */}
       {analyticsData && (

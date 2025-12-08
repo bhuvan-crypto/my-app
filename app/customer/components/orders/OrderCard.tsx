@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppLoading } from "@/api/loadingStore";
+import { useAppLoading } from "@/lib/loadingStore";
 import { Order } from "@/lib/ordersStore";
 import { Box, HStack, Text, SimpleGrid, Button } from "@chakra-ui/react";
 

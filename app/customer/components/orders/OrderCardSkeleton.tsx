@@ -10,6 +10,7 @@ export default function OrderCardSkeleton() {
       _dark={{ bg: "gray.800" }}
       borderRadius="md"
       shadow="sm"
+      w={"full"}
     >
       <HStack justify="space-between" mb={3}>
         <Box w="60%">

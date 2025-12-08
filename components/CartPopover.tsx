@@ -7,13 +7,15 @@ import {
   HStack,
   Text,
   useDisclosure,
+  Center,
+  VStack,
 } from '@chakra-ui/react';
 import { useCart } from '../lib/cartStore';
 import useProducts from '../lib/productsStore';
 import useOrders from '../lib/ordersStore';
 import type { Product } from '../lib/products';
 import { useAuthStore } from '../lib/authStore';
-import { useAppLoading } from '../api/loadingStore';
+import { useAppLoading } from '../lib/loadingStore';
 
 export default function CartPopover() {
   const auth = useAuthStore();
@@ -42,17 +44,17 @@ export default function CartPopover() {
 
 
   return (
-    <Box position="relative" display="inline-block">
-      <Button size="sm" onClick={open ? onClose : onOpen} aria-label="Toggle cart" p={2}>
+    <Box position="relative" display="inline-block"  w={"full"} h={"1/2"}>
+     
+
+      {/* {open && ( */}
+        <Box  w={"full"} bg="white" _dark={{ bg: '#0b0b0b' }} borderWidth="1px" borderColor="gray.200" shadow="md" borderRadius="md" zIndex={30} h={"full"}>
+          <VStack p={4} w={"full"} h={"full"}>
+           <HStack  w={"full"}> <Text fontSize="sm" fontWeight="semibold">Your cart</Text>
+             <Button size="sm" onClick={open ? onClose : onOpen} aria-label="Toggle cart" p={2}>
         Cart: <strong style={{ marginLeft: 6 }}>{count}</strong>
-      </Button>
-
-      {open && (
-        <Box position="absolute" right={0} top="48px" w={["xs", "xs"]} bg="white" _dark={{ bg: '#0b0b0b' }} borderWidth="1px" borderColor="gray.200" shadow="md" borderRadius="md" zIndex={30}>
-          <Box p={4}>
-            <Text fontSize="sm" fontWeight="semibold">Your cart</Text>
-
-            <Box mt={3} maxH="14rem" overflowY="auto">
+      </Button></HStack>
+            <Box mt={3} pr={2}  overflow="auto" w={"full"} flex={1}>
               {Object.keys(cart).length === 0 ? (
                 <Text fontSize="xs" color="gray.500">No items in your cart.</Text>
               ) : (
@@ -61,6 +63,8 @@ export default function CartPopover() {
                     const p = products.find((x) => x.id === id);
                     if (!p) return null;
                     return (
+                      <>
+                      
                       <HStack key={id} justifyContent="space-between" py={2} borderBottomWidth="1px" borderColor="gray.100">
                         <Box>
                           <Text fontSize="sm">{p.name}</Text>
@@ -73,24 +77,28 @@ export default function CartPopover() {
                           <Button size="sm" aria-label={`Increase ${p.name} quantity`} onClick={() => add(id, auth.user.id)} loading={isAdding} >+</Button>
                         </HStack>
                       </HStack>
+                      </>
+
                     );
                   })}
                 </Box>
               )}
             </Box>
 
-            <Box mt={3} display="flex" alignItems="center" justifyContent="space-between">
+            <VStack w={"full"}>
+              <Box mt={3} w={"full"} display="flex" alignItems="center" justifyContent="space-between">
               <Text fontSize="sm" fontWeight="medium">Total</Text>
               <Text fontSize="sm" fontWeight="medium">${total.toFixed(2)}</Text>
             </Box>
 
-            <Box mt={3} display="flex" gap={2}>
+            <Box mt={3}  w={"full"} display="flex" gap={2}>
               <Button flex={1} variant="outline" onClick={onClose}>Close</Button>
               <Button flex={1} colorScheme="teal" onClick={placeOrder} loading={isOrdering}>Order</Button>
             </Box>
-          </Box>
+            </VStack>
+          </VStack>
         </Box>
-      )}
+      {/* )} */}
     </Box>
   );
 }

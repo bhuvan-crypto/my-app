@@ -8,7 +8,7 @@ import { useAuthStore } from "../../lib/authStore";
 import { PRODUCTS } from "../../lib/products";
 import useProducts from "../../lib/productsStore";
 import ProductForm from "../../components/ProductForm";
-import { useAppLoading } from "../../api/loadingStore";
+import { useAppLoading } from "../../lib/loadingStore";
 import AnalyticsPage from "./components/analytics/page";
 import { useAnalyticsStore } from "@/lib/analyticsStore";
 

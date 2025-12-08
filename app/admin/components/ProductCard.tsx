@@ -20,6 +20,8 @@ export function ProductCard({ product }: { product: Product }) {
       borderRadius="md"
       shadow="sm"
       _hover={{ shadow: "md", transform: "translateY(-2px)", transition: "0.2s" }}
+      w={"full"}
+      h={"fit"}
     >
       <Box
         h="36"
