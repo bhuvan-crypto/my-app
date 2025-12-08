@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { 
   Card, 
   CardHeader, 
@@ -18,65 +18,22 @@ import {
 } from "@chakra-ui/react";
 
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-import { IFeatureAnalytics, ITrendItem, getFeatureTrend } from "@/api/analytics";
+import { useAnalyticsStore } from "@/lib/analyticsStore"; // Import store
+import { useAppLoading } from "@/api/loadingStore";
 
-interface Props {
-  features: IFeatureAnalytics[]; 
-}
+export default function TrendChart() {
+  // 1. Connect to Store
+  const { 
+    trendData, 
+    trendParams, 
+    setTrendParam, 
+    analyticsData 
+  } = useAnalyticsStore();
+  const isTrendLoading = useAppLoading((s) => s.isActionLoading("Activity fetch" ));
+  const { selectedFeature, granularity, startDate, endDate } = trendParams;
+  const features = analyticsData?.features || [];
 
-type Granularity = "minute" | "hour" | "day";
-
-export default function TrendChart({ features }: Props) {
-  // 1. Internal State
-  const [selectedFeature, setSelectedFeature] = useState<string>("");
-  const [granularity, setGranularity] = useState<Granularity>("hour"); 
-  
-  // Initialize dates (default to last 7 days)
-  const [startDate, setStartDate] = useState<string>(() => {
-    const d = new Date();
-    d.setDate(d.getDate() - 7);
-    return d.toISOString().slice(0, 16); 
-  });
-  const [endDate, setEndDate] = useState<string>(() => 
-    new Date().toISOString().slice(0, 16)
-  );
-
-  const [data, setData] = useState<ITrendItem[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  // 2. Initialize default feature selection
-  useEffect(() => {
-    if (features.length > 0 && !selectedFeature) {
-      setSelectedFeature(features[0]._id);
-    }
-  }, [features]);
-
-  // 3. Fetch Data Logic
-  useEffect(() => {
-    async function fetchData() {
-      if (!selectedFeature) return;
-      
-      setLoading(true);
-      try {
-        const res = await getFeatureTrend(selectedFeature, {
-          startDate: new Date(startDate).toISOString(),
-          endDate: new Date(endDate).toISOString(),
-        });
-
-        if (res.success) {
-          setData(res.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch trend", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, [selectedFeature, granularity, startDate, endDate]); 
-
-  // 4. Dropdown Collections
+  // 2. Dropdown Collections
   const featureList = createListCollection({
     items: features.map((f) => ({ label: f._id, value: f._id })),
   });
@@ -89,11 +46,11 @@ export default function TrendChart({ features }: Props) {
     ],
   });
 
-  // 5. Transform Data & Formatters
+  // 3. Transform Data & Formatters (View logic remains in component)
    const chartData = useMemo(() => {
     const groupedMap = new Map<number, number>();
 
-    data.forEach((item) => {
+    trendData.forEach((item) => {
       const date = new Date(item._id);
 
       if (granularity === "day") {
@@ -117,7 +74,7 @@ export default function TrendChart({ features }: Props) {
       }))
       .sort((a, b) => a.timestamp - b.timestamp);
 
-  }, [data, granularity]); 
+  }, [trendData, granularity]); 
   
   const formatAxisDate = (timestamp: number) => {
     const d = new Date(timestamp);
@@ -138,9 +95,9 @@ export default function TrendChart({ features }: Props) {
                 <Select.Root
                   collection={featureList}
                   value={[selectedFeature]}
-                  onValueChange={(e) => setSelectedFeature(e.value[0])}
+                  onValueChange={(e) => setTrendParam("selectedFeature", e.value[0])}
                   size="sm"
-                  disabled={loading && features.length === 0}
+                  disabled={isTrendLoading && features.length === 0}
                 >
                   <Select.HiddenSelect />
                   <Select.Control>
@@ -166,9 +123,9 @@ export default function TrendChart({ features }: Props) {
                 <Select.Root
                   collection={granularityList}
                   value={[granularity]}
-                  onValueChange={(e) => setGranularity(e.value[0] as Granularity)}
+                  onValueChange={(e) => setTrendParam("granularity", e.value[0])}
                   size="sm"
-                  disabled={loading}
+                  disabled={isTrendLoading}
                 >
                   <Select.HiddenSelect />
                   <Select.Control>
@@ -189,7 +146,7 @@ export default function TrendChart({ features }: Props) {
                 </Select.Root>
             </Box>
 
-            {/* Date Pickers (Native but styled) */}
+            {/* Date Pickers */}
             <HStack 
               gap={2} 
               bg="gray.50" 
@@ -204,7 +161,7 @@ export default function TrendChart({ features }: Props) {
               <Input 
                   type="datetime-local" 
                   value={startDate} 
-                  onChange={(e) => setStartDate(e.target.value)} 
+                  onChange={(e) => setTrendParam("startDate", e.target.value)}
                   size="xs"
                   width="fit-content"
                   variant="flushed" 
@@ -213,7 +170,6 @@ export default function TrendChart({ features }: Props) {
                   max={endDate}
                   css={{ 
                     "::-webkit-calendar-picker-indicator": { cursor: "pointer", filter: "invert(0.5)" },
-                    // Remove default Input border/outline from variant="flushed" override
                     borderBottom: "none !important"
                   }}
               />
@@ -221,7 +177,7 @@ export default function TrendChart({ features }: Props) {
               <Input 
                   type="datetime-local" 
                   value={endDate} 
-                  onChange={(e) => setEndDate(e.target.value)} 
+                  onChange={(e) => setTrendParam("endDate", e.target.value)}
                   size="xs"
                   width="fit-content"
                   variant="flushed"
@@ -240,7 +196,7 @@ export default function TrendChart({ features }: Props) {
       
       <CardBody height="100%">
         <Box w="100%" h="100%" minH="300px" position="relative">
-          {loading && (
+          {isTrendLoading && (
              <Center position="absolute" inset="0" bg="whiteAlpha.800" zIndex={10}>
                 <Spinner color="blue.500" />
              </Center>

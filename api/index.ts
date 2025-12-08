@@ -15,7 +15,9 @@ api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().accessToken;
   if (token) config.headers.Authorization = `Bearer ${token}`;
   const actionKey = config.operation;
-  useAppLoading.getState().startAction(actionKey);
+  if (config.loading) {
+    useAppLoading.getState().startAction(actionKey);
+  }
   return config;
 }, (error) => {
   const actionKey = error.operation;
@@ -62,9 +64,13 @@ api.interceptors.response.use(
 );
 
 // ⭐ Generic typed requests
-export async function apiGet<T>(url: string, config: { operation: IOpTypes }
+export async function apiGet<T>(url: string, config: { operation: IOpTypes, loading?: boolean }
 ): Promise<ApiResponse<T>> {
-  const res = await api.get(url, config);
+  const finalConfig = {
+    loading: true,  // default
+    ...config       // override if provided
+  };
+  const res = await api.get(url, finalConfig);
   return res.data;
 }
 

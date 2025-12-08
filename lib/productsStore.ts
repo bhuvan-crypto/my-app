@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 import { Product, PRODUCTS } from "./products";
 import { create } from "zustand";
 import { addProduct, deleteProduct, getProducts, ICreateProduct, updateProduct } from "../api/products";
+import { useAnalyticsStore } from "./analyticsStore";
 
 type ProductsState = {
   products: Product[];
@@ -19,10 +20,14 @@ const useProducts = create<ProductsState>()(
     add: async (data: ICreateProduct) => {
       await addProduct(data);
       await get().fetchProducts();
+      await useAnalyticsStore.getState().fetchAnalytics(false)
+      await useAnalyticsStore.getState().fetchTrend(false)
     },
     remove: async (id) => {
       await deleteProduct(id);
       await get().fetchProducts();
+      await useAnalyticsStore.getState().fetchAnalytics(false)
+      await useAnalyticsStore.getState().fetchTrend(false)
     },
     set: (items) => set({ products: items }),
     fetchProducts: async () => {

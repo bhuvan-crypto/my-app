@@ -10,6 +10,7 @@ import useProducts from "../../lib/productsStore";
 import ProductForm from "../../components/ProductForm";
 import { useAppLoading } from "../../api/loadingStore";
 import AnalyticsPage from "./components/analytics/page";
+import { useAnalyticsStore } from "@/lib/analyticsStore";
 
 export default function AdminPage() {
   const products = useProducts((s) => s.products);
@@ -20,7 +21,7 @@ export default function AdminPage() {
   const isUpdating = useAppLoading((s) => s.isActionLoading("Product update"));
   const isAdding = useAppLoading((s) => s.isActionLoading("Product add"));
   const [editingId, setEditingId] = useState<string | null>(null);
-
+  const {fetchAnalytics,fetchTrend} = useAnalyticsStore()
 
   useEffect(() => {
     fetch();
@@ -54,6 +55,8 @@ export default function AdminPage() {
                   if (res.success) {
                     setEditingId(null);
                     fetch();
+                    fetchAnalytics(false)
+                    fetchTrend(false)
                   }
                 }}
                 onCancel={() => setEditingId(null)}

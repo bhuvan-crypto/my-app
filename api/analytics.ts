@@ -23,9 +23,10 @@ export interface IAnalyticsData {
     features: IFeatureAnalytics[];
 }
 const base = "analytics"
-export async function getAnalytics() {
+export async function getAnalytics(loading=true) {
     return await apiGet<IAnalyticsData>(`/${base}/v1/overview`, {
-        operation: "Analytics fetch", 
+        operation: "Analytics fetch",
+        loading 
     });
 }
 // --- NEW TYPES FOR TREND ---
@@ -42,7 +43,7 @@ export interface ITrendParams {
     timezone?: string;
 }
 
-export async function getFeatureTrend(featureName: string, params: ITrendParams = {}) {
+export async function getFeatureTrend(featureName: string, params: ITrendParams = {},loading=true) {
     const searchParams = new URLSearchParams();
     if (params.startDate) searchParams.append("startDate", params.startDate);
     if (params.endDate) searchParams.append("endDate", params.endDate);
@@ -52,6 +53,7 @@ export async function getFeatureTrend(featureName: string, params: ITrendParams 
 
     // Note: ensure operation "Activity fetch" is added to types/axios.d.ts if strict
     return await apiGet<ITrendItem[]>(`/analytics/features/${featureName}/trend?${searchParams.toString()}`, {
-        operation: "Activity fetch" as any, 
+        operation: "Activity fetch" , 
+        loading
     });
 }

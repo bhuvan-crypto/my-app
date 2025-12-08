@@ -5,12 +5,13 @@ export type ICart = "Ecommerce API" | "Cart Item add" | "Cart Item delete" | "Ca
 export type IUser = "Login" | "Signup"
 export type IProducts = "getProducts" | "Product add" | "Product update" | "Product delete"
 export type IOrders = "Order placing" | "Order delete" | "Order fetching"
-export type IAnalytics = "Analytics fetch";
+export type IAnalytics = "Analytics fetch" |  "Activity fetch";
 
 
 declare module "axios" {
   export interface AxiosRequestConfig {
     operation: IOpTypes;
+    loading?:booelan;
     errCallback?: any;
   }
 }

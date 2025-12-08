@@ -2,33 +2,24 @@
 
 import { useEffect, useState } from "react";
 import { Box, Heading, ButtonGroup, Button, Text, SimpleGrid, Spinner, Center } from "@chakra-ui/react";
-import { IAnalyticsData, getAnalytics } from "@/api/analytics";
 import { useAppLoading } from "@/api/loadingStore";
+import { useAnalyticsStore } from "@/lib/analyticsStore";
 import DeviceChart from "./components/DeviceChart";
 import HeatmapChart from "./components/HeatmapChart";
 import RadarFeatureChart from "./components/RadarFeatureChart";
 import StackedActionChart from "./components/StackedActionChart";
-import TimelineChart from "./components/TimelineChart";
 import TopUsersChart from "./components/TopUsersChart";
 import TrendChart from "./components/TrendChart";
 
-
-
 export default function AnalyticsPage() {
   const [view, setView] = useState<"feature" | "timeline" | "device" | "heatmap" | "radar" | "users">("feature");
-  const [analyticsData, setAnalyticsData] = useState<IAnalyticsData | null>(null);
-
-  // Cast string to 'any' temporarily until Step 4 is complete
-  const isLoading = useAppLoading((s) => s.isActionLoading("Analytics fetch" as any));
+  
+  // Use Zustand store
+  const { analyticsData, fetchAnalytics } = useAnalyticsStore();
+  const isLoading = useAppLoading((s) => s.isActionLoading("Analytics fetch"));
 
   useEffect(() => {
-    async function init() {
-      const res = await getAnalytics();
-      if (res.success) {
-        setAnalyticsData(res.data);
-      }
-    }
-    init();
+    fetchAnalytics();
   }, []);
 
   return (
@@ -80,7 +71,7 @@ export default function AnalyticsPage() {
             (analyticsData ? <StackedActionChart data={analyticsData.features} /> : <Text>No data available</Text>)
         )}
         {/* Other charts can rely on dummy data until their APIs are ready */}
-        {view === "timeline" && analyticsData && <TrendChart features={analyticsData?.features} />}
+        {view === "timeline" && analyticsData && <TrendChart  />}
         {view === "device" && <DeviceChart />}
         {view === "heatmap" && <HeatmapChart />}
         {view === "radar" && <RadarFeatureChart />}
